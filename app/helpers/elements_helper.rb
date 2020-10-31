@@ -12,6 +12,14 @@ module ElementsHelper
   def sage_elements
     [
       # Sage Generated Elements
+        {
+          title: "toggle",
+          description: "Toggle elements allow the user to select options and are composed of checkbox and radio elements.",
+          scss: "todo",
+          rails: "todo",
+          react: "todo",
+          a11y: "todo",
+        },
       {
         title: "breadcrumbs",
         description: "Breadcrumbs provide a sense of where we are in the site structure with hyperlinks to previous areas in that structure. Our element also provides a specific \"Back link\" variation",

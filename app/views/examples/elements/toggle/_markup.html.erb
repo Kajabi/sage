@@ -1,0 +1,7 @@
+<div class="sage-toggle sage-toggle--<%= toggle_type %><%= has_error ? " sage-toggle--error" : "" %>">
+  <input type="<%= input_type %>"<% if id.present? %> id="<%= id %>"<% end %> class="sage-toggle__input"<% if name.present? %> name="<%= name %>"<% end %><% if value.present? %> value="<%= value %>"<% end %><%= checked ? " checked" : "" %><%= disabled ? " disabled" : "" %><%= required ? " required" : "" %>>
+  <label for="<%= id %>" class="sage-toggle__label"><%= label_text %></label>
+  <% if message != "" %>
+  <div class="sage-toggle__message">Additional Info</div>
+  <% end %>
+</div>

@@ -1,0 +1,355 @@
+/* ==================================================
+  ** toggle
+  type: element
+
+================================================== */
+
+$-toggle-color-default: sage-color(grey, 400);
+$-toggle-color-disabled: sage-color(grey, 200);
+$-toggle-color-error: sage-color(red);
+$-toggle-background-error: sage-color(red, 100);
+$-toggle-color-primary: sage-color(primary);
+$-toggle-color-white: sage-color(white);
+$-toggle-focus-outline-size: sage-spacing(2xs);
+$-toggle-focus-outline-width: 1;
+$-toggle-element-spacing: sage-spacing(sm);
+
+$-toggle-checkbox-border-radius: sage-border(radius);
+$-toggle-checkbox-input-size: rem(20px);
+$-toggle-checkbox-marker-border: rem(2px);
+$-toggle-checkbox-marker-height: rem(12px);
+$-toggle-checkbox-marker-offset: $-toggle-checkbox-marker-border * 2;
+$-toggle-checkbox-marker-rotate: 42.5deg;
+$-toggle-checkbox-marker-width: rem(6px);
+$-toggle-checkbox-transition: 0.15s ease-in-out;
+
+$-toggle-radio-border-radius: sage-border(radius-round);
+$-toggle-radio-button-size: rem(16px);
+$-toggle-radio-color-disabled-checked: sage-color(grey, 300);
+$-toggle-radio-color-disabled: sage-color(grey, 100);
+$-toggle-radio-selected-indicator-size: rem(7px);
+$-toggle-radio-transition: 0.15s ease-in-out;
+
+$-toggle-switch-border-radius: rem(16px);
+$-toggle-switch-height: rem(24px);
+$-toggle-switch-toggle-size: rem(20px);
+$-toggle-switch-width: rem(44px);
+
+// ==================================================
+// GENERAL TOGGLE STYLES
+// ==================================================
+
+.sage-toggle {
+  display: flex;
+  flex-flow: row wrap;
+  margin-bottom: $-toggle-element-spacing;
+}
+.sage-toggle__input {
+  appearance: none;
+  position: relative;
+  outline: none;
+  cursor: pointer;
+  &::before,
+  &::after {
+    content: "";
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+  }
+  &::before {
+    transform: translate3d(-50%, -50%, 0) scale(0.94);
+    height: calc(100% + (#{$-toggle-focus-outline-width * 1px} + #{$-toggle-focus-outline-size * 2}));
+    width: calc(100% + (#{$-toggle-focus-outline-width * 1px} + #{$-toggle-focus-outline-size * 2}));
+    border: ($-toggle-focus-outline-width * 1px) solid $-toggle-color-primary;
+    opacity: 0;
+    pointer-events: none;
+  }
+  &:checked {
+    color: $-toggle-color-primary;
+    background-color: $-toggle-color-primary;
+  }
+  &:disabled {
+    background: $-toggle-color-disabled;
+    cursor: not-allowed;
+    + .sage-toggle__label {
+      color: $-toggle-color-default;
+      cursor: not-allowed;
+    }
+  }
+}
+.sage-toggle__label {
+  @extend %t-sage-body;
+  flex: 1;
+  margin-left: rem(12px);
+  cursor: pointer;
+}
+.sage-toggle--error {
+  .sage-toggle__input::before {
+    border-color: $-toggle-color-error;
+  }
+  .sage-toggle__label,
+  .sage-toggle__message {
+    color: $-toggle-color-error;
+  }
+}
+
+// ==================================================
+// CHECKBOXES
+// ==================================================
+
+.sage-toggle--checkbox {
+  .sage-toggle__input {
+    height: $-toggle-checkbox-input-size;
+    width: $-toggle-checkbox-input-size;
+    margin-top: 4px;
+    color: $-toggle-color-default;
+    border: 1px solid $-toggle-color-default;
+    border-radius: $-toggle-checkbox-border-radius;
+    transition: background $-toggle-checkbox-transition, box-shadow $-toggle-checkbox-transition, border $-toggle-checkbox-transition;
+    &::before,
+    &::after {
+      transition: opacity 0.2s ease-in-out, transform $-toggle-checkbox-transition;
+      opacity: 0;
+    }
+    &::before {
+      border: ($-toggle-focus-outline-width * 1px) solid $-toggle-color-primary;
+      border-radius: $-toggle-checkbox-border-radius;
+      opacity: 0;
+    }
+    &::after {
+      transform: translate3d(-50%, calc(-50% + #{$-toggle-checkbox-marker-offset}), 0) rotate($-toggle-checkbox-marker-rotate);
+      height: $-toggle-checkbox-marker-height;
+      width: $-toggle-checkbox-marker-width;
+      border-right: $-toggle-checkbox-marker-border solid $-toggle-color-white;
+      border-bottom: $-toggle-checkbox-marker-border solid $-toggle-color-white;
+    }
+    &:hover:not(:checked):not(:disabled) {
+      border-color: sage-color(grey, 500);
+      box-shadow: sage-shadow(sm);
+    }
+  }
+  // checkbox checked
+  .sage-toggle__input:checked {
+    background: $sage-checkbox-color-checked;
+    box-shadow: sage-shadow(sm);
+    &::after {
+      transform: translate3d(-50%, calc(-50% - #{$-toggle-checkbox-marker-border} / 2), 0) rotate($-toggle-checkbox-marker-rotate);
+      opacity: 1;
+    }
+  }
+  // checkbox disabled
+  .sage-toggle__input:disabled {
+    opacity: 0.5;
+    &::before {
+      display: none;
+    }
+    &:checked {
+      box-shadow: none;
+    }
+  }
+  // checkbox focus/active
+  .sage-toggle__input:focus,
+  .sage-toggle__input:active {
+    &:not(:disabled) {
+      outline: none;
+    }
+    &::before {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 1;
+    }
+  }
+  // checkbox errors
+  &.sage-toggle--error .sage-toggle__input {
+    background: $-toggle-background-error;
+    border-color: $-toggle-color-error;
+    &::before {
+      border-color: $-toggle-color-error;
+    }
+    &::after {
+      border-right-color: $-toggle-color-error;
+      border-bottom-color: $-toggle-color-error;
+    }
+    &:hover:not(:checked):not(:disabled) {
+      border-color: $-toggle-color-error;
+    }
+  }
+}
+
+// ==================================================
+// RADIOS
+// ==================================================
+
+.sage-toggle--radio {
+  .sage-toggle__input {
+    height: $-toggle-radio-button-size;
+    width: $-toggle-radio-button-size;
+    margin-top: 6px;
+    color: $-toggle-color-default;
+    outline: none;
+    background-color: sage-color(white);
+    border: rem(1px) solid $-toggle-color-default;
+    border-radius: $-toggle-radio-border-radius;
+    transition: background 0.2s ease-in-out, box-shadow $-toggle-radio-transition, border $-toggle-radio-transition;
+    &::before,
+    &::after {
+      transform: translate3d(-50%, -50%, 0);
+      color: inherit;
+      border-radius: inherit;
+      transition: opacity 0.2s ease-in-out, transform $sage-radio-transition;
+      opacity: 0;
+    }
+    &::after {
+      transform: translate3d(-50%, -50%, 0) scale(0);
+      height: $-toggle-radio-selected-indicator-size;
+      width: $-toggle-radio-selected-indicator-size;
+      background-color: $-toggle-color-white;
+      transition: opacity $sage-radio-transition, transform 0.3s ease-in-out;
+    }
+  }
+  .sage-toggle__label {
+    margin-left: rem(12px);
+  }
+  // radio checked
+  .sage-toggle__input:checked {
+    color: $-toggle-color-primary;
+    background-color: $-toggle-color-primary;
+    border-color: transparent;
+    box-shadow: sage-shadow(sm);
+    &::after {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 1;
+    }
+  }
+  .sage-toggle__input:hover {
+    &:not(:checked):not(:disabled) {
+      border-color: $sage-radio-color-hover;
+      box-shadow: sage-shadow(sm);
+    }
+  }
+  // radio focus/active
+  .sage-toggle__input:focus:not(:disabled),
+  .sage-toggle__input:active:not(:disabled) {
+    &::before {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 1;
+    }
+    &::after {
+      transform: translate3d(-50%, -50%, 0) scale(1);
+      opacity: 1;
+    }
+  }
+  // radio disabled
+  .sage-toggle__input:disabled {
+    background: $-toggle-radio-color-disabled;
+    border-color: $-toggle-radio-color-disabled-checked;
+    cursor: not-allowed;
+    opacity: 0.5;
+    + .sage-toggle__label {
+      color: $-toggle-radio-color-disabled-checked;
+      cursor: not-allowed;
+    }
+    &:not(:checked)::after {
+      background: $-toggle-radio-color-disabled;
+    }
+    // radio disabled & checked
+    &:checked {
+      background: $-toggle-radio-color-disabled-checked;
+      box-shadow: none;
+    }
+  }
+  // radio errors
+  &.sage-toggle--error {
+    .sage-toggle__label {
+      color: $-toggle-color-error;
+    }
+    .sage-toggle__input {
+      border-color: $-toggle-color-error;
+    }
+    :hover:not(:checked):not(:disabled) {
+      border-color: $-toggle-color-error;
+    }
+    .sage-toggle__input:checked {
+      color: $-toggle-color-error;
+      background-color: $-toggle-color-error;
+    }
+    .sage-toggle__input::after {
+      background-color: sage-color(white);
+    }
+  }
+}
+
+// ==================================================
+// SWITCHES
+// ==================================================
+
+.sage-toggle--switch {
+  .sage-toggle__input {
+    transform: translateY(2px);
+    height: $-toggle-switch-height;
+    width: $-toggle-switch-width;
+    color: $-toggle-color-default;
+    background: $-toggle-color-default;
+    border: 0;
+    border-radius: $-toggle-switch-border-radius;
+    transition: background 0.3s ease-out;
+    &::before {
+      border-radius: $sage-switch-border-radius;
+    }
+    &::after {  // switch toggle
+      transform: translate3d(-100%, -50%, 0);
+      height: $-toggle-switch-toggle-size;
+      width: $-toggle-switch-toggle-size;
+      background: sage-color(white);
+      border-radius: sage-border(radius-round);
+      box-shadow: sage-shadow(sm);
+      transition: transform 0.2s ease-in-out;
+    }
+    &:focus:not(:disabled)::before,
+    &:active:not(:disabled)::before {
+      transform: translate3d(-50%, -50%, 0);
+      opacity: 1;
+    }
+  }
+  // switch message
+  .sage-toggle__message {
+    width: 100%;
+    padding: 0 0 0 ($sage-switch-width + $sage-switch-label-left-spacing);
+    @extend %t-sage-body-xsmall;
+  }
+  // switch checked
+  .sage-toggle__input:checked {
+    color: sage-color(primary);
+    background-color: sage-color(primary);
+    &::after {
+      transform: translate3d(0, -50%, 0);
+    }
+  }
+  // switch disabled
+  .sage-toggle__input:disabled {
+    background: $sage-switch-color-disabled;
+    cursor: not-allowed;
+    &::after {
+      box-shadow: none;
+    }
+    ~ .sage-switch__label,
+    ~ .sage-switch__message {
+      color: $sage-switch-color-disabled-text;
+      cursor: inherit;
+    }
+    &:checked ~ .sage-switch__label,
+    &:checked ~ .sage-switch__message {
+      color: $sage-switch-color-disabled-checked-text;
+    }
+    // switch disabled & checked
+    &:checked {
+      background: $sage-switch-color-disabled-checked;
+    }
+  }
+  // switch errors
+  &.sage-toggle--error {
+    .sage-toggle__input {
+      background-color: $-toggle-color-error;
+    }
+  }
+}
